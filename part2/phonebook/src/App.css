@@ -26,7 +26,7 @@ input {
   border-radius: 6px;
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
-  box-sizing: border-box; /* Fundamental para que el padding no estire el input */
+  box-sizing: border-box; 
 }
 
 input:focus {
@@ -52,7 +52,7 @@ button:hover {
 }
 
 ul {
-  list-style: none; /* Adiós viñetas a la izquierda */
+  list-style: none; 
   padding: 0;
   margin-top: 20px;
 }
@@ -66,4 +66,10 @@ li {
   justify-content: space-between;
   align-items: center;
   border-left: 4px solid var(--primary-color);
+}
+
+.phone-number {
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-left: 10px;
 }
