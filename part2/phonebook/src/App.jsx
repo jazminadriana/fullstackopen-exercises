@@ -15,6 +15,16 @@ const App = () => {
   // Function to handle the form submission for adding a new person
   const addPerson = (event) => {
     event.preventDefault()
+
+    const nameExists = persons.some(person => 
+      person.name.toLowerCase() === newName.toLowerCase()
+    )
+
+    if (nameExists) {
+      alert(`${newName} is already added to phonebook`)
+      return
+    }
+
     const personObject = {
       name: newName,
     }
