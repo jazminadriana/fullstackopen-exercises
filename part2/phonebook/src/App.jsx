@@ -1,79 +1,62 @@
-import './App.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
-import Persons from './components/Persons'  
+import Persons from './components/Persons'
+import './App.css'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [searchTerm, setSearchTerm] = useState('')
+  const [filter, setFilter] = useState('')
 
-  // Function to handle changes in the search input field
-  const handleSearchChange = (event) => {
-  setSearchTerm(event.target.value)
-}
+  useEffect(() => {
+    console.log('Efecto: Iniciando petición...')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('Promesa cumplida: Datos recibidos')
+        setPersons(response.data)
+      })
+  }, []) 
 
-  // Functions to handle changes in the input fields for name and number
-  const handleNameChange = (event) => {
-    setNewName(event.target.value)
-  }
-
-  const handleNumberChange = (event) => {
-  setNewNumber(event.target.value)  
-}
-
-  // Function to handle the form submission for adding a new person
   const addPerson = (event) => {
     event.preventDefault()
-
-    const nameExists = persons.some(person => 
-      person.name.toLowerCase() === newName.toLowerCase()
-    )
-
-    if (nameExists) {
+    if (persons.some(p => p.name === newName)) {
       alert(`${newName} is already added to phonebook`)
       return
     }
-
     const personObject = {
       name: newName,
-      number: newNumber
+      number: newNumber,
+      id: persons.length + 1
     }
-
     setPersons(persons.concat(personObject))
     setNewName('')
     setNewNumber('')
   }
 
-  const personsToShow = searchTerm === ''
-  ? persons
-  : persons.filter(person => 
-      person.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+  const personsToShow = filter === ''
+    ? persons
+    : persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()))
 
   return (
     <div className="container">
       <h2>Phonebook</h2>
-      <Filter value={searchTerm} onChange={handleSearchChange} />
-
+      <Filter value={filter} onChange={(e) => setFilter(e.target.value)} />
+      
       <h3>Add a new</h3>
       <PersonForm 
         onSubmit={addPerson}
-        nameValue={newName}
-        nameOnChange={handleNameChange}
-        numberValue={newNumber}
-        numberOnChange={handleNumberChange}
+        newName={newName}
+        handleNameChange={(e) => setNewName(e.target.value)}
+        newNumber={newNumber}
+        handleNumberChange={(e) => setNewNumber(e.target.value)}
       />
 
       <h3>Numbers</h3>
-      <Persons personsToShow={personsToShow} />
+      <Persons persons={personsToShow} />
     </div>
   )
 }
