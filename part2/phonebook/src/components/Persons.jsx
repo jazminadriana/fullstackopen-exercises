@@ -1,9 +1,11 @@
 const Persons = ({ persons }) => {
   return (
     <ul>
-      {persons.map(person => 
-        <li key={person.id}>{person.name} <span className="phone-number">{person.number}</span></li>
-      )}
+      {persons.map(person => (
+        <li key={person.id}>
+          {person.name} {person.number}
+        </li>
+      ))}
     </ul>
   )
 }

@@ -1,7 +1,9 @@
-const Filter = ({ value, onChange }) => (
-  <div className="filter-container">
-    filter shown with: <input value={value} onChange={onChange} />
-  </div>
-)
+const Filter = ({ value, onChange }) => {
+  return (
+    <div>
+      filtrar por nombre: <input value={value} onChange={onChange} />
+    </div>
+  )
+}
 
 export default Filter

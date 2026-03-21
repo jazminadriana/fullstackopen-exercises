@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './services/persons'
 import './App.css'
 
 const App = () => {
@@ -12,29 +12,34 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    console.log('Efecto: Iniciando petición...')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('Promesa cumplida: Datos recibidos')
-        setPersons(response.data)
+    personService.getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
-  }, []) 
+  }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
-    if (persons.some(p => p.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+    
+    if (persons.some(p => p.name.toLowerCase() === newName.toLowerCase())) {
+      alert(`${newName} ya está en la agenda`)
       return
     }
+
     const personObject = {
       name: newName,
-      number: newNumber,
-      id: persons.length + 1
+      number: newNumber
     }
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
+
+    personService.create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+      .catch(error => {
+        alert('Error al guardar el contacto')
+      })
   }
 
   const personsToShow = filter === ''
@@ -43,10 +48,11 @@ const App = () => {
 
   return (
     <div className="container">
-      <h2>Phonebook</h2>
+      <h2>Agenda Telefónica</h2>
+      
       <Filter value={filter} onChange={(e) => setFilter(e.target.value)} />
       
-      <h3>Add a new</h3>
+      <h3>Añadir nuevo</h3>
       <PersonForm 
         onSubmit={addPerson}
         newName={newName}
@@ -55,7 +61,7 @@ const App = () => {
         handleNumberChange={(e) => setNewNumber(e.target.value)}
       />
 
-      <h3>Numbers</h3>
+      <h3>Números</h3>
       <Persons persons={personsToShow} />
     </div>
   )
