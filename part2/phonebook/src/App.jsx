@@ -31,7 +31,8 @@ const App = () => {
       number: newNumber
     }
 
-    personService.create(personObject)
+    personService
+      .create(personObject)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
