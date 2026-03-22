@@ -43,9 +43,23 @@ const App = () => {
       })
   }
 
+  const deletePersonOf = (id, name) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(p => p.id !== id))
+        })
+        .catch(error => {
+          alert(`Contact '${name}' had already been deleted from the server.`)
+          setPersons(persons.filter(p => p.id !== id)) 
+        })
+    }
+  }
+
   const personsToShow = filter === ''
     ? persons
-    : persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()))
+    : persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase())) 
 
   return (
     <div className="container">
@@ -63,7 +77,7 @@ const App = () => {
       />
 
       <h3>Números</h3>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} deletePerson={deletePersonOf} />
     </div>
   )
 }

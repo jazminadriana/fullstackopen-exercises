@@ -34,11 +34,6 @@
       "name": "Armando Montero",
       "number": "876 657 8987",
       "id": "1m-41h6B57g"
-    },
-    {
-      "name": "Paulina Leyva",
-      "number": "987 4567 3456",
-      "id": "Iqa2Jr-qYKQ"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
