@@ -20,9 +20,29 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
+
+    const existingPerson = persons.find(p => p.name.toLowerCase() === newName.toLowerCase())    
     
-    if (persons.some(p => p.name.toLowerCase() === newName.toLowerCase())) {
-      alert(`${newName} ya está en la agenda`)
+    if (existingPerson) {
+      const confirmUpdate = window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)
+
+      if (confirmUpdate) {
+        const changedPerson = { ...existingPerson, number: newNumber }
+
+        personService
+          .update(existingPerson.id, changedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person =>
+              person.id !== existingPerson.id ? person : returnedPerson
+            ))
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+            alert(`Contact '${existingPerson.name}' had already been deleted from the server.`)
+          })    
+      }
+
       return
     }
 
