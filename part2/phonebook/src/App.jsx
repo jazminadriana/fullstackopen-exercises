@@ -4,12 +4,14 @@ import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons'
 import './App.css'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     personService.getAll()
@@ -35,6 +37,12 @@ const App = () => {
             setPersons(persons.map(person =>
               person.id !== existingPerson.id ? person : returnedPerson
             ))
+
+            setSuccessMessage(`Added ${returnedPerson.name}`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
+
             setNewName('')
             setNewNumber('')
           })
@@ -55,11 +63,13 @@ const App = () => {
       .create(personObject)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
+        setSuccessMessage(`Added ${returnedPerson.name}`)
+        setTimeout(() => setSuccessMessage(null), 5000)
         setNewName('')
         setNewNumber('')
       })
       .catch(error => {
-        alert('Error al guardar el contacto')
+        alert('Error saving contact.')
       })
   }
 
@@ -83,11 +93,12 @@ const App = () => {
 
   return (
     <div className="container">
-      <h2>Agenda Telefónica</h2>
+      <h2>Phonebook</h2>
+      <Notification message={successMessage} />
       
       <Filter value={filter} onChange={(e) => setFilter(e.target.value)} />
       
-      <h3>Añadir nuevo</h3>
+      <h3>Add a new</h3>
       <PersonForm 
         onSubmit={addPerson}
         newName={newName}
@@ -96,7 +107,7 @@ const App = () => {
         handleNumberChange={(e) => setNewNumber(e.target.value)}
       />
 
-      <h3>Números</h3>
+      <h3>Numbers</h3>
       <Persons persons={personsToShow} deletePerson={deletePersonOf} />
     </div>
   )

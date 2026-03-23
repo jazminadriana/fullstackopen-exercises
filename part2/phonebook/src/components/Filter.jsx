@@ -1,7 +1,7 @@
 const Filter = ({ value, onChange }) => {
   return (
     <div>
-      filtrar por nombre: <input value={value} onChange={onChange} />
+      Filter shown with: <input value={value} onChange={onChange} />
     </div>
   )
 }

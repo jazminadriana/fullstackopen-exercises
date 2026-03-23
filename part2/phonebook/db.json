@@ -16,24 +16,9 @@
       "id": "3"
     },
     {
-      "name": "Laura Daniela",
-      "number": "951 345 6787",
-      "id": "MV2WYkpRxoQ"
-    },
-    {
-      "name": "Armando Montero",
-      "number": "876 657 8987",
-      "id": "1m-41h6B57g"
-    },
-    {
-      "name": "José José",
-      "number": "040-123456",
-      "id": "3rf8ofVyrk4"
-    },
-    {
-      "name": "Alberto",
-      "number": "040-123456",
-      "id": "UKVhdj3_qJM"
+      "name": "Jazmin Hdez",
+      "number": "9513604878",
+      "id": "ida8olUp9Qk"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
