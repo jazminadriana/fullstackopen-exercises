@@ -12,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [successMessage, setSuccessMessage] = useState(null)
+  const [messageType, setMessageType] = useState('success')
 
   useEffect(() => {
     personService.getAll()
@@ -47,7 +48,10 @@ const App = () => {
             setNewNumber('')
           })
           .catch(error => {
-            alert(`Contact '${existingPerson.name}' had already been deleted from the server.`)
+            setMessageType('error') // Cambiamos a rojo
+            setSuccessMessage(`Information of '${existingPerson.name}' has already been removed from server`)
+            setPersons(persons.filter(p => p.id !== existingPerson.id))
+            setTimeout(() => setSuccessMessage(null), 5000)
           })    
       }
 
@@ -94,7 +98,7 @@ const App = () => {
   return (
     <div className="container">
       <h2>Phonebook</h2>
-      <Notification message={successMessage} />
+      <Notification message={successMessage} type={messageType} />
       
       <Filter value={filter} onChange={(e) => setFilter(e.target.value)} />
       
